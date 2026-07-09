@@ -1,0 +1,12 @@
+# Rust
+/target
+**/*.rs.bk
+Cargo.lock
+
+# macOS
+.DS_Store
+
+# Env / secrets (never commit — governance: nothing private)
+.env
+*.pem
+*.key

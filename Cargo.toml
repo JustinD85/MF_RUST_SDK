@@ -1,0 +1,12 @@
+[package]
+name = "mf_rust_sdk"
+version = "0.0.0"
+edition = "2021"
+license = "MIT"
+description = "A Rust port of Anthropic's Claude Agent SDK; drives the claude CLI over its stream-json protocol. Derivative of the MIT-licensed TypeScript SDK."
+repository = "https://github.com/JustinD85/MF_RUST_SDK"
+readme = "README.md"
+keywords = ["claude", "agent", "sdk", "anthropic"]
+categories = ["api-bindings"]
+
+[dependencies]

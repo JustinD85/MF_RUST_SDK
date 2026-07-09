@@ -1,0 +1,10 @@
+MF_RUST_SDK
+
+This project is a Rust port / derivative of Anthropic's Claude Agent SDK for
+TypeScript (https://github.com/anthropics/claude-agent-sdk-typescript), which is
+licensed under the MIT License, Copyright (c) Anthropic.
+
+Portions of this project that are derived from that work remain under the MIT
+License. This project drives the proprietary `claude` CLI over its stream-json
+subprocess protocol; it does not include or redistribute the Claude Code CLI
+engine, which is Anthropic's proprietary software.
