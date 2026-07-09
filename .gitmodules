@@ -1,0 +1,3 @@
+[submodule "vendor/claude-agent-sdk-typescript"]
+	path = vendor/claude-agent-sdk-typescript
+	url = https://github.com/anthropics/claude-agent-sdk-typescript

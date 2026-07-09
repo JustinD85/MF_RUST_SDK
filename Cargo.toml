@@ -1,6 +1,6 @@
 [package]
 name = "mf_rust_sdk"
-version = "0.0.0"
+version = "0.1.0"
 edition = "2021"
 license = "MIT"
 description = "A Rust port of Anthropic's Claude Agent SDK; drives the claude CLI over its stream-json protocol. Derivative of the MIT-licensed TypeScript SDK."
@@ -10,3 +10,13 @@ keywords = ["claude", "agent", "sdk", "anthropic"]
 categories = ["api-bindings"]
 
 [dependencies]
+tokio = { version = "1", features = ["process", "io-util", "macros", "rt-multi-thread"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+futures-core = "0.3"
+async-stream = "0.3"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
+futures-util = "0.3"
