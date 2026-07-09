@@ -8,7 +8,7 @@ It communicates with the `claude` CLI over its streaming-JSON interface — the 
 
 ## How it relates to the official SDKs
 
-This is **not** a fork, and it does **not** reimplement Claude Code's engine. Claude Code's agent loop, built-in tools, and session handling live inside the `claude` CLI. Like the official TypeScript and Python SDKs, this crate is a thin **client** that drives that CLI — here, a Rust port of the client protocol the TypeScript SDK uses.
+This is **not** a fork, and it does **not** reimplement Claude Code's engine. Claude Code's agent loop, built-in tools, and session handling live inside the `claude` CLI. Like the official TypeScript and Python SDKs, this crate is a thin **client** that drives that CLI — here, a Rust port of the client protocol the official **Python SDK** (`claude-agent-sdk`) implements.
 
 ## Requirements
 
@@ -67,10 +67,10 @@ The CLI's client protocol has no formal stability guarantee, so this crate targe
 
 ### Pinned versions
 
-- **Vendored reference:** [`anthropics/claude-agent-sdk-typescript`](https://github.com/anthropics/claude-agent-sdk-typescript), pinned as a git submodule at `vendor/claude-agent-sdk-typescript`, commit `95e94bf8ba194fc956262ed77d83ce41a70d9e6d` (the upstream default-branch `main` HEAD at pin time).
-- **Note:** This upstream repo currently contains documentation, examples, and CI only — it has **no** root `package.json` and **no** published SDK `src/` at this commit (the compiled SDK ships via the npm package `@anthropic-ai/claude-agent-sdk`). This port is therefore derived from the **official public `claude` CLI `stream-json` protocol** — captured from the installed CLI and from Anthropic's official Claude Code / Agent SDK documentation — rather than from TypeScript source in the vendored repo. The submodule is pinned for attribution and to track upstream docs/examples.
-- **`claude` CLI version targeted:** `2.1.205 (Claude Code)` — the version installed and used for conformance testing.
-- **Protocol source of truth:** the official docs at [code.claude.com](https://code.claude.com) (CLI reference, headless, agent-sdk) plus the live CLI's `--output-format stream-json` output.
+- **Reference SDK (source of truth):** [`anthropics/claude-agent-sdk-python`](https://github.com/anthropics/claude-agent-sdk-python), vendored as a pinned git submodule at `vendor/claude-agent-sdk-python` — package `claude-agent-sdk` version **0.2.114**, pinned at commit **`fdee0adc99f46e65ae9d6d029a6f4fb31bb8cffa`** (the upstream default-branch HEAD at pin time; tag `v0.2.114`). This crate's transport, message/block types, options, and query loop are ported from this SDK's actual implementation (`src/claude_agent_sdk/`).
+- **Secondary reference (docs/examples only):** [`anthropics/claude-agent-sdk-typescript`](https://github.com/anthropics/claude-agent-sdk-typescript), pinned as a submodule at `vendor/claude-agent-sdk-typescript`, commit `95e94bf8ba194fc956262ed77d83ce41a70d9e6d`. This TS repo contains only docs, examples, and CI at that commit (no published SDK `src/`), so it is retained for reference and attribution, **not** as the porting source.
+- **`claude` CLI version targeted:** `2.1.205 (Claude Code)` — installed and used for the live conformance test.
+- **Protocol note:** the port mirrors the Python SDK's transport faithfully — it drives the CLI with `--output-format stream-json --verbose --input-format stream-json` and writes the prompt to the child's stdin as a newline-delimited JSON `user` message (it does **not** use `--print`), and sets the SDK entrypoint env vars. The interactive control protocol (initialize handshake, `canUseTool`, hooks, interrupts, session resume) is deferred to follow-up work.
 
 ## License
 
