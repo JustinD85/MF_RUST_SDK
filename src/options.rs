@@ -148,9 +148,10 @@ impl Options {
     /// Render the CLI argument vector implied by these options.
     ///
     /// Always includes `--output-format stream-json` and `--verbose`. The
-    /// prompt itself and its `--print` flag are appended by the transport, not
-    /// here. `cwd` and `path_to_claude_executable` are process-spawn concerns
-    /// and are intentionally not rendered as flags.
+    /// terminal `--input-format stream-json` flag is appended by the transport,
+    /// which also delivers the prompt over stdin (not as a flag). `cwd` and
+    /// `path_to_claude_executable` are process-spawn concerns and are
+    /// intentionally not rendered as flags.
     pub fn render_args(&self) -> Vec<String> {
         let mut args: Vec<String> = vec![
             "--output-format".to_string(),
