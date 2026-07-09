@@ -60,8 +60,9 @@ fn parse_message_lines(
 /// Run a single-shot query against the `claude` CLI and stream back decoded
 /// [`Message`]s.
 ///
-/// Spawns the CLI in `--print` mode, reads newline-delimited JSON from its
-/// stdout, and yields one item per non-empty line:
+/// Spawns the CLI in streaming-JSON mode (delivering the prompt over stdin),
+/// reads newline-delimited JSON from its stdout, and yields one item per
+/// non-empty line:
 ///
 /// * a successfully decoded line yields `Ok(Message)`;
 /// * a line that fails to parse yields `Err(Error::Json { .. })` carrying the
@@ -79,7 +80,7 @@ pub fn query(
 ) -> impl Stream<Item = Result<Message, Error>> {
     let prompt = prompt.into();
     stream! {
-        let mut transport = match Transport::spawn(&prompt, &options) {
+        let mut transport = match Transport::spawn(&prompt, &options).await {
             Ok(t) => t,
             Err(e) => {
                 yield Err(e);

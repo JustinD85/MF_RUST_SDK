@@ -174,6 +174,14 @@ pub enum ContentBlock {
         /// The text content.
         text: String,
     },
+    /// An extended-thinking block.
+    Thinking {
+        /// The thinking content.
+        thinking: String,
+        /// The cryptographic signature for the thinking block, when present.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        signature: Option<String>,
+    },
     /// A tool-use request block.
     ToolUse {
         /// The tool-use identifier.
@@ -252,6 +260,23 @@ mod tests {
             .expect("should contain a tool_use block");
         assert_eq!(name, "Bash");
         assert_eq!(input["command"], "ls");
+    }
+
+    #[test]
+    fn deserializes_thinking_block() {
+        let line = r#"{"type":"thinking","thinking":"let me reason","signature":"sig123"}"#;
+        let block: ContentBlock =
+            serde_json::from_str(line).expect("thinking block should decode");
+        match block {
+            ContentBlock::Thinking {
+                thinking,
+                signature,
+            } => {
+                assert_eq!(thinking, "let me reason");
+                assert_eq!(signature, Some("sig123".to_string()));
+            }
+            other => panic!("expected Thinking, got {other:?}"),
+        }
     }
 
     #[test]
