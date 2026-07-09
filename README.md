@@ -4,7 +4,7 @@ An unofficial **Rust client for the Claude Agent SDK** — drive [Claude Code](h
 
 It communicates with the `claude` CLI over its streaming-JSON interface — the same approach Anthropic's official [TypeScript](https://github.com/anthropics/claude-agent-sdk-typescript) and Python SDKs take — letting you send prompts, stream responses and tool calls, gate tool use, run subagents, and resume sessions from a Rust program.
 
-> **Status: early scaffold.** The client isn't implemented yet — this repo is currently just the project skeleton and license.
+> **Status:** The core client is implemented — a streaming `query()` over the `claude` CLI (process transport plus NDJSON parsing). APIs may still change.
 
 ## How it relates to the official SDKs
 

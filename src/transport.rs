@@ -75,18 +75,27 @@ impl Transport {
     /// Await the child's exit. On a non-zero status, drain stderr and return
     /// [`Error::CliExited`].
     pub async fn finish(&mut self) -> Result<(), Error> {
-        let status = self.child.wait().await.map_err(Error::Io)?;
+        // Drain stderr CONCURRENTLY with awaiting exit so the child never blocks
+        // on a full stderr pipe (which would deadlock against wait()). stderr is
+        // taken out first so its borrow is a local, splitting it cleanly from the
+        // borrow of self.child. Draining happens on BOTH the success and error
+        // paths, so the pipe is never left to fill.
+        let mut stderr = self.stderr.take();
+        let mut stderr_text = String::new();
+        let drain = async {
+            if let Some(s) = stderr.as_mut() {
+                // Best-effort drain; if reading stderr itself fails we still want
+                // to surface the exit, so log and continue with what we have.
+                if let Err(e) = s.read_to_string(&mut stderr_text).await {
+                    eprintln!("warning: failed to read claude stderr: {e}");
+                }
+            }
+        };
+
+        let (status_res, ()) = tokio::join!(self.child.wait(), drain);
+        let status = status_res.map_err(Error::Io)?;
         if status.success() {
             return Ok(());
-        }
-
-        let mut stderr_text = String::new();
-        if let Some(mut stderr) = self.stderr.take() {
-            // Best-effort drain; if reading stderr itself fails we still want to
-            // surface the non-zero exit, so log and continue with what we have.
-            if let Err(e) = stderr.read_to_string(&mut stderr_text).await {
-                eprintln!("warning: failed to read claude stderr: {e}");
-            }
         }
 
         Err(Error::CliExited {
