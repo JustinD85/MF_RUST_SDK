@@ -8,6 +8,52 @@
 //! official TypeScript SDK
 //! (<https://github.com/anthropics/claude-agent-sdk-typescript>).
 //!
-//! **Status:** scaffold only — the client is not implemented yet.
-//!
 //! Unofficial; not affiliated with or endorsed by Anthropic.
+//!
+//! ## Example
+//!
+//! ```no_run
+//! use futures_util::StreamExt;
+//! use mf_rust_sdk::{query, ContentBlock, Message, Options, PermissionMode};
+//!
+//! #[tokio::main]
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//!     let options = Options::default()
+//!         .model("claude-sonnet")
+//!         .allowed_tools(["Read", "Bash"])
+//!         .permission_mode(PermissionMode::AcceptEdits);
+//!
+//!     let mut stream = Box::pin(query("Summarize the README.", options));
+//!
+//!     while let Some(item) = stream.next().await {
+//!         match item? {
+//!             Message::Assistant { message, .. } => {
+//!                 for block in message.content {
+//!                     if let ContentBlock::Text { text } = block {
+//!                         println!("{text}");
+//!                     }
+//!                 }
+//!             }
+//!             Message::Result { result, .. } => {
+//!                 if let Some(text) = result {
+//!                     println!("final: {text}");
+//!                 }
+//!             }
+//!             _ => {}
+//!         }
+//!     }
+//!
+//!     Ok(())
+//! }
+//! ```
+
+mod error;
+mod message;
+mod options;
+mod query;
+mod transport;
+
+pub use error::Error;
+pub use message::{AnthropicMessage, ContentBlock, Message, MessageParam};
+pub use options::{Options, PermissionMode};
+pub use query::query;
