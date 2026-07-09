@@ -1,12 +1,13 @@
 //! # MF_RUST_SDK
 //!
-//! A Rust port of Anthropic's Claude Agent SDK.
+//! An unofficial Rust client for the Claude Agent SDK.
 //!
-//! Like the official TypeScript and Python SDKs, this crate does **not** reimplement
-//! the agent engine — it drives the `claude` CLI over its stream-json subprocess
-//! protocol, mirroring the official MIT-licensed TypeScript SDK
+//! Like Anthropic's official TypeScript and Python SDKs, this crate does **not**
+//! reimplement Claude Code's engine — it drives the `claude` CLI over its
+//! streaming-JSON interface. It is a Rust port of the client protocol used by the
+//! official TypeScript SDK
 //! (<https://github.com/anthropics/claude-agent-sdk-typescript>).
 //!
-//! **Status:** scaffold only. The port has not been implemented yet.
-
-// Port not yet implemented — see README.md and the project's CANONICAL-TRUTHS (T1/T2/T3).
+//! **Status:** scaffold only — the client is not implemented yet.
+//!
+//! Unofficial; not affiliated with or endorsed by Anthropic.

@@ -1,29 +1,31 @@
 # MF_RUST_SDK
 
-A Rust port of Anthropic's official [Claude Agent SDK for TypeScript](https://github.com/anthropics/claude-agent-sdk-typescript).
+An unofficial **Rust client for the Claude Agent SDK** — drive [Claude Code](https://github.com/anthropics/claude-code) agent sessions from Rust.
 
-## What this is
+It communicates with the `claude` CLI over its streaming-JSON interface — the same approach Anthropic's official [TypeScript](https://github.com/anthropics/claude-agent-sdk-typescript) and Python SDKs take — letting you send prompts, stream responses and tool calls, gate tool use, run subagents, and resume sessions from a Rust program.
 
-A Rust client for the Claude Agent SDK. Like the official TypeScript and Python SDKs, it does **not** reimplement the agent engine — it **drives the `claude` CLI** over its stream-json subprocess protocol. This is a **port / derivative** of the official MIT-licensed TypeScript SDK — **not a fork** (a fork would be a same-language copy; this is a reimplementation in Rust that mirrors the same client protocol).
+> **Status: early scaffold.** The client isn't implemented yet — this repo is currently just the project skeleton and license.
 
-## Status
+## How it relates to the official SDKs
 
-**Early scaffold.** The port has not been implemented yet — this repo currently contains only the project skeleton, license, and governance. See the roadmap below.
+This is **not** a fork, and it does **not** reimplement Claude Code's engine. Claude Code's agent loop, built-in tools, and session handling live inside the `claude` CLI. Like the official TypeScript and Python SDKs, this crate is a thin **client** that drives that CLI — here, a Rust port of the client protocol the TypeScript SDK uses.
 
-## Tracking upstream (drift detection)
+## Requirements
 
-Because the CLI subprocess protocol has no formal stability contract, this crate tracks the official SDK deliberately:
+- The [`claude` CLI](https://github.com/anthropics/claude-code) installed and available on your `PATH`.
 
-1. **Pinned vendored reference** — the official TS SDK is vendored as a git submodule pinned to a known commit; `git diff` on a bump shows exactly what changed.
-2. **Release watch** — notifications on new `@anthropic-ai/claude-agent-sdk` releases and `claude` CLI versions, compared against the pins.
-3. **Conformance tests** — run this crate against the actually-installed `claude` CLI; behavioral drift fails loudly.
+## Usage
 
-Pinned versions (recorded at first port): `@anthropic-ai/claude-agent-sdk` `<TBD>`, `claude` CLI `<TBD>`.
+_Coming soon — the client is not implemented yet._
 
-## Governance
+## Staying in sync with upstream
 
-This repository is **public** and contains **only** content derived from the official, MIT-licensed Anthropic Agent SDK. It contains **no** private or organization-internal data, endpoints, credentials, or proprietary logic. Anything private is kept elsewhere and is never committed here. Tests and fixtures are generic by rule.
+The CLI's client protocol has no formal stability guarantee, so this crate targets specific `claude` CLI and official-SDK versions, tracks upstream releases, and uses a conformance test suite (run against the installed CLI) to catch breaking protocol changes.
 
 ## License
 
-MIT — see [LICENSE](LICENSE). This project is derived from Anthropic's `claude-agent-sdk-typescript` (MIT); see [NOTICE](NOTICE) for attribution.
+MIT — see [LICENSE](LICENSE). Derived from Anthropic's MIT-licensed [`claude-agent-sdk-typescript`](https://github.com/anthropics/claude-agent-sdk-typescript); see [NOTICE](NOTICE) for attribution.
+
+## Disclaimer
+
+Unofficial. Not affiliated with, authorized, or endorsed by Anthropic.
